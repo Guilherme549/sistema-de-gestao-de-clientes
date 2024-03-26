@@ -18,7 +18,7 @@
         <tbody>
             {% for customer in customer_list %}
             <tr>
-                <th>{{customer.get_full_name}}</th>
+                <th><a href="{{ customer.get_absolute_url }}">{{customer.get_full_name}}</a></th>
                 <th>{{customer.get_full_city}}</th>
                 <th>{{customer.get_full_phone_number}}</th>
                 <th>{{customer.email}}</th>
