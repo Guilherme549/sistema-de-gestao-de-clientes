@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 # }
 
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config(default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}")
 
 
 # Password validation
