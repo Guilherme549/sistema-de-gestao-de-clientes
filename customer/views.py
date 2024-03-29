@@ -3,14 +3,23 @@ from .models import Customer
 from .forms import CustomerForm
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 class CustomerListView(ListView):
     template_name = "customer/customer_list.html"
     paginate_by = 5
     model = Customer
-    queryset = Customer.objects.all()
+    
+    def get_queryset(self):
+        name = self.request.GET.get("name")
+        if name:
+                 # o icontains ignora a busca de nome com letras maiuculas ou minusculas
+            object_list = self.model.objects.filter(Q(first_name__icontains=name) | Q(last_name__icontains=name) | Q(email__icontains=name) | Q(phone_number__icontains=name) | Q(city__icontains=name))
 
+        else:
+            object_list = self.model.objects.all()
+        return object_list
 class CustomerCreateView(CreateView):
     template_name = "customer/customer.html"
     form_class = CustomerForm

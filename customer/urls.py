@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import CustomerListView, CustomerCreateView, CustomerUpdateView, CustomerDeleteView
 
+
 app_name = "customer"
 
 urlpatterns = [
