@@ -1,56 +1,45 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Customer
 from .forms import CustomerForm
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
-
 class CustomerListView(ListView):
+    model = Customer
     template_name = "customer/customer_list.html"
     paginate_by = 5
-    model = Customer
     
     def get_queryset(self):
-        name = self.request.GET.get("name")
-        if name:
-                 # o icontains ignora a busca de nome com letras maiuculas ou minusculas
-            object_list = self.model.objects.filter(Q(first_name__icontains=name) | Q(last_name__icontains=name) | Q(email__icontains=name) | Q(phone_number__icontains=name) | Q(city__icontains=name))
+        query = self.request.GET.get('name', '')
+        if query:
+            return self.model.objects.filter(
+                Q(first_name__icontains=query) | 
+                Q(last_name__icontains=query) | 
+                Q(email__icontains=query) | 
+                Q(phone_number__icontains=query) | 
+                Q(city__icontains=query)
+            ).order_by('first_name', 'last_name')
+        return super().get_queryset().order_by('first_name', 'last_name')
 
-        else:
-            object_list = self.model.objects.all()
-        return object_list
 class CustomerCreateView(CreateView):
-    template_name = "customer/customer.html"
+    model = Customer
     form_class = CustomerForm
-
-    def form_valid(self, form):
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("customer:customer-list")
-    
+    template_name = "customer/customer_form.html"
+    success_url = reverse_lazy('customer:customer-list')
 
 class CustomerUpdateView(UpdateView):
-    template_name = "customer/customer.html"
+    model = Customer
     form_class = CustomerForm
+    template_name = "customer/customer_form.html"
+    success_url = reverse_lazy('customer:customer-list')
 
     def get_object(self):
-        id = self.kwargs.get("id")
-        return get_object_or_404(Customer, id=id)
-
-    def form_valid(self, form):
-        return super().form_valid(form)
-    
-    def get_success_url(self):
-        return reverse("customer:customer-list")
-    
+        return get_object_or_404(Customer, id=self.kwargs.get('id'))
 
 class CustomerDeleteView(DeleteView):
-    def get_object(self):
-        id = self.kwargs.get("id")
-        return get_object_or_404(Customer, id=id)
-    
-    def get_success_url(self):
-        return reverse("customer:customer-list")
+    model = Customer
+    success_url = reverse_lazy('customer:customer-list')
 
+    def get_object(self):
+        return get_object_or_404(Customer, id=self.kwargs.get('id'))
