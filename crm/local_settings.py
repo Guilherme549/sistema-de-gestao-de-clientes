@@ -17,7 +17,7 @@ SECRET_KEY = 'django-insecure-xnt9f5y^g-npt3q0%!^vz@%l2^vceisro#7iqv_ctt(c04fuxc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["gerenciador-de-clientes-ab8b98e04258.herokuapp.com/"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -74,15 +74,13 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
