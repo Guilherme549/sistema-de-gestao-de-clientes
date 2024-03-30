@@ -10,6 +10,9 @@ python manage.py migrate
 Criar usuário admin
 python manage.py createsuperuser
 
+variavel de ambiente
+$env:DJANGO_SETTINGS_MODULE="crm.local_settings"
+
 Levantar a aplicação
 python manage.py runserver
 
